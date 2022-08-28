@@ -1,3 +1,65 @@
 from django.db import models
 
-# Create your models here.
+
+class Pelicula(models.Model):
+    titulo = models.CharField(max_length=100)
+    description = models.TextField()
+    reparto = models.TextField()
+    director = models.CharField(max_length=100)
+    duracion = models.IntegerField()
+    genero = models.CharField(max_length=100)
+
+
+class Sala(models.Model):
+    nombre = models.CharField(max_length=100)
+    ciudad = models.CharField(max_length=100)
+
+
+class Funcion(models.Model):
+    horaEntrada = models.TimeField(auto_now=False, auto_now_add=False)
+    horaSalida = models.TimeField(auto_now=False, auto_now_add=False)
+    fecha = models.DateField(auto_now=False)
+    idPelicula = models.ForeignKey(Pelicula, on_delete=models.PROTECT)
+    idSala = models.ForeignKey(Sala, on_delete=models.PROTECT)
+
+
+class Boleta(models.Model):
+    nombreCliente = models.CharField(max_length=100)
+    fechaCompra = models.DateField(auto_now=False)
+    idFuncion = models.ForeignKey(Funcion, on_delete=models.PROTECT)
+
+
+class Asiento(models.Model):
+    numero = models.IntegerField()
+    idSala = models.ForeignKey(Sala, on_delete=models.PROTECT)
+
+
+class AsientoReservado(models.Model):
+    idAsiento = models.ForeignKey(Asiento, on_delete=models.PROTECT)
+    idBoleta = models.ForeignKey(Boleta, on_delete=models.PROTECT)
+    idFuncion = models.ForeignKey(Funcion, on_delete=models.PROTECT)
+
+
+class Producto(models.Model):
+    nombre = models.CharField(max_length=100)
+    precio = models.FloatField()
+    cantidad = models.IntegerField()
+
+
+class ProductoEnCombo(models.Model):
+    idProducto = models.ForeignKey(Producto, on_delete=models.PROTECT)
+    codigoCombo = models.IntegerField()
+
+
+class Combo(models.Model):
+    nombre = models.CharField(max_length=100)
+    precioDescuento = models.FloatField()
+    idProductoCombo = models.ForeignKey(ProductoEnCombo, on_delete=models.PROTECT)
+    cantidad = models.IntegerField()
+
+
+class Pedido(models.Model):
+    productos = models.ManyToManyField(Producto)
+    combos = models.ManyToManyField(Combo)
+    pagado = models.BooleanField()
+    total = models.FloatField()
