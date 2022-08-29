@@ -16,22 +16,22 @@ class Sala(models.Model):
 
 
 class Funcion(models.Model):
+    idPelicula = models.ForeignKey(Pelicula, on_delete=models.PROTECT)
+    idSala = models.ForeignKey(Sala, on_delete=models.PROTECT)
     horaEntrada = models.TimeField(auto_now=False, auto_now_add=False)
     horaSalida = models.TimeField(auto_now=False, auto_now_add=False)
     fecha = models.DateField(auto_now=False)
-    idPelicula = models.ForeignKey(Pelicula, on_delete=models.PROTECT)
-    idSala = models.ForeignKey(Sala, on_delete=models.PROTECT)
 
 
 class Boleta(models.Model):
+    idFuncion = models.ForeignKey(Funcion, on_delete=models.PROTECT)
     nombreCliente = models.CharField(max_length=100)
     fechaCompra = models.DateField(auto_now=False)
-    idFuncion = models.ForeignKey(Funcion, on_delete=models.PROTECT)
 
 
 class Asiento(models.Model):
-    numero = models.IntegerField()
     idSala = models.ForeignKey(Sala, on_delete=models.PROTECT)
+    numero = models.IntegerField()
 
 
 class AsientoReservado(models.Model):
@@ -52,9 +52,9 @@ class ProductoEnCombo(models.Model):
 
 
 class Combo(models.Model):
+    idProductoCombo = models.ForeignKey(ProductoEnCombo, on_delete=models.PROTECT)
     nombre = models.CharField(max_length=100)
     precioDescuento = models.FloatField()
-    idProductoCombo = models.ForeignKey(ProductoEnCombo, on_delete=models.PROTECT)
     cantidad = models.IntegerField()
 
 
