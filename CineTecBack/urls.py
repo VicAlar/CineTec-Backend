@@ -13,9 +13,20 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path
+# from django.contrib import admin
+from django.urls import path, include
+from rest_framework import routers
+from cineTec_app.views import *
+
+router = routers.DefaultRouter()
+router.register('pelicula', PeliculaView, basename='pelicula')
+router.register('sala', SalaView, basename='sala')
+router.register('funcion', FuncionView, basename='funcion')
+router.register('boleta', BoletaView, basename='boleta')
+router.register('asiento', AsientoReservadoView, basename='asiento')
+router.register(('producto'), ProductoView, basename='producto')
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    #   path('admin/', admin.site.urls),
+    path('', include(router.urls)),
 ]
