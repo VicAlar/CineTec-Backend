@@ -24,7 +24,8 @@ router.register('sala', SalaView, basename='sala')
 router.register('funcion', FuncionView, basename='funcion')
 router.register('boleta', BoletaView, basename='boleta')
 router.register('asiento', AsientoReservadoView, basename='asiento')
-router.register(('producto'), ProductoView, basename='producto')
+router.register('producto', ProductoView, basename='producto')
+router.register('combo', ComboView, basename='combo')
 
 urlpatterns = [
     #   path('admin/', admin.site.urls),

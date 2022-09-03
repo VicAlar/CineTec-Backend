@@ -19,7 +19,6 @@ class FuncionSerializer(serializers.ModelSerializer):
     idPelicula = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Pelicula.objects.all())
     sala = SalaSerializer(read_only=True, many=False, source='idSala')
     idSala = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Sala.objects.all())
-
     class Meta:
         model = Funcion
         fields = '__all__'
@@ -61,20 +60,9 @@ class ProductoSerializer(serializers.ModelSerializer):
         model = Producto
         fields = '__all__'
 
-
-class ProductoEnComboSerializer(serializers.ModelSerializer):
-    producto = ProductoSerializer(read_only=True)
-    idProducto = serializers.PrimaryKeyRelatedField(queryset=Producto.objects.all(), source='producto')
-
-    class Meta:
-        model = ProductoEnCombo
-        fields = '__all__'
-
-
 class ComboSerializer(serializers.ModelSerializer):
-    productoCombo = ProductoEnComboSerializer(read_only=True)
-    idProductoCombo = serializers.PrimaryKeyRelatedField(queryset=ProductoEnCombo.objects.all(), source='productoCombo')
-
+    producto = ProductoSerializer(read_only=True, many=True, source='Productos')
+    Productos = serializers.PrimaryKeyRelatedField(write_only=True, many=True, queryset=Producto.objects.all())
     class Meta:
         model = Combo
         fields = '__all__'
