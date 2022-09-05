@@ -60,21 +60,23 @@ class ProductoSerializer(serializers.ModelSerializer):
         model = Producto
         fields = '__all__'
 
+
 class ComboSerializer(serializers.ModelSerializer):
     producto = ProductoSerializer(read_only=True, many=True, source='Productos')
     Productos = serializers.PrimaryKeyRelatedField(write_only=True, many=True, queryset=Producto.objects.all())
+
     class Meta:
         model = Combo
         fields = '__all__'
 
 
 class PedidoSerializer(serializers.ModelSerializer):
-    productos = ProductoSerializer(many=True, read_only=True)
-    combos = ComboSerializer(many=True, read_only=True)
+    producto = ProductoSerializer(read_only=True, many=True, source='productos')
+    productos = serializers.PrimaryKeyRelatedField(write_only=True, many=True, queryset=Producto.objects.all())
+    combo = ComboSerializer(read_only=True, many=True, source='combos')
+    combos = serializers.PrimaryKeyRelatedField(write_only=True, many=True, queryset=Combo.objects.all())
 
     class Meta:
         model = Pedido
         fields = '__all__'
 
-
-# Serializer to insert into boleta and asiento
