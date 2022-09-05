@@ -19,6 +19,7 @@ class FuncionSerializer(serializers.ModelSerializer):
     idPelicula = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Pelicula.objects.all())
     sala = SalaSerializer(read_only=True, many=False, source='idSala')
     idSala = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Sala.objects.all())
+
     class Meta:
         model = Funcion
         fields = '__all__'
@@ -34,21 +35,17 @@ class BoletaSerializer(serializers.ModelSerializer):
 
 
 class AsientoSerializer(serializers.ModelSerializer):
-    sala = SalaSerializer(read_only=True)
-    idSala = serializers.PrimaryKeyRelatedField(queryset=Sala.objects.all(), source='sala')
-
     class Meta:
         model = Asiento
         fields = '__all__'
 
 
 class AsientoReservadoSerializer(serializers.ModelSerializer):
-    asiento = AsientoSerializer(read_only=True)
-    idAsiento = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Asiento.objects.all(), source='asiento')
-    boleta = BoletaSerializer(read_only=True)
-    idBoleta = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Boleta.objects.all(), source='boleta')
-    funcion = FuncionSerializer(read_only=True)
-    idFuncion = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Funcion.objects.all(), source='funcion')
+    boleta = BoletaSerializer(read_only=True, many=False, source='idBoleta')
+    idBoleta = serializers.PrimaryKeyRelatedField(queryset=Boleta.objects.all())
+    # Obtener asiento del idSala
+    asiento = AsientoSerializer(read_only=True, many=False, source='idAsiento')
+    idAsiento = serializers.PrimaryKeyRelatedField(queryset=Asiento.objects.all())
 
     class Meta:
         model = AsientoReservado
@@ -71,12 +68,11 @@ class ComboSerializer(serializers.ModelSerializer):
 
 
 class PedidoSerializer(serializers.ModelSerializer):
-    producto = ProductoSerializer(read_only=True, many=True, source='productos')
+    Productos = ProductoSerializer(read_only=True, many=True, source='productos')
     productos = serializers.PrimaryKeyRelatedField(write_only=True, many=True, queryset=Producto.objects.all())
-    combo = ComboSerializer(read_only=True, many=True, source='combos')
+    Combos = ComboSerializer(read_only=True, many=True, source='combos')
     combos = serializers.PrimaryKeyRelatedField(write_only=True, many=True, queryset=Combo.objects.all())
 
     class Meta:
         model = Pedido
         fields = '__all__'
-

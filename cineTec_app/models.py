@@ -41,9 +41,10 @@ class Asiento(models.Model):
 
 
 class AsientoReservado(models.Model):
+    idFuncion = models.ForeignKey(Funcion, on_delete=models.PROTECT)
     idAsiento = models.ForeignKey(Asiento, on_delete=models.PROTECT)
     idBoleta = models.ForeignKey(Boleta, on_delete=models.PROTECT)
-    idFuncion = models.ForeignKey(Funcion, on_delete=models.PROTECT)
+    reservado = models.BooleanField(default=False)
 
 
 class Producto(models.Model):
@@ -66,3 +67,8 @@ class Pedido(models.Model):
     combos = models.ManyToManyField(Combo, blank=True)
     pagado = models.BooleanField()
     total = models.FloatField()
+
+
+class Inventario(models.Model):
+    producto = models.ForeignKey(Producto, on_delete=models.PROTECT)
+    cantidad = models.IntegerField()
