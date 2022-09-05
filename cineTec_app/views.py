@@ -34,3 +34,7 @@ class AsientoReservadoView(viewsets.ModelViewSet):
 class ProductoView(viewsets.ModelViewSet):
     queryset = Producto.objects.all()
     serializer_class = ProductoSerializer
+
+class ComboView(viewsets.ModelViewSet):
+    queryset = Combo.objects.all()
+    serializer_class = ComboSerializer
