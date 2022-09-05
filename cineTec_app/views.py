@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
+from rest_framework import generics
+from rest_framework.response import Response
 
 from cineTec_app.models import *
 from cineTec_app.serializers import *
@@ -44,3 +46,13 @@ class ComboView(viewsets.ModelViewSet):
 class PedidoView(viewsets.ModelViewSet):
     queryset = Pedido.objects.all()
     serializer_class = PedidoSerializer
+
+
+# Vista para los asientos filtrados por sala
+class AsientosSalaView(generics.ListAPIView):
+    serializer_class = AsientoSerializer
+
+    def get_queryset(self):
+        idSala = self.kwargs['idSala']
+        queryset = Asiento.objects.filter(idSala=idSala)
+        return queryset

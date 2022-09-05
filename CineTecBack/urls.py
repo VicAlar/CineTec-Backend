@@ -31,4 +31,5 @@ router.register('pedido', PedidoView, basename='pedido')
 urlpatterns = [
     #   path('admin/', admin.site.urls),
     path('', include(router.urls)),
+    path('asientosSala/<idSala>/', AsientosSalaView.as_view()),
 ]
