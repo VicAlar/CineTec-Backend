@@ -35,6 +35,12 @@ class ProductoView(viewsets.ModelViewSet):
     queryset = Producto.objects.all()
     serializer_class = ProductoSerializer
 
+
 class ComboView(viewsets.ModelViewSet):
     queryset = Combo.objects.all()
     serializer_class = ComboSerializer
+
+
+class PedidoView(viewsets.ModelViewSet):
+    queryset = Pedido.objects.all()
+    serializer_class = PedidoSerializer
