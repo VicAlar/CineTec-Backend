@@ -52,21 +52,17 @@ class BoletaSerializer(serializers.ModelSerializer):
 
 
 class AsientoSerializer(serializers.ModelSerializer):
-    sala = SalaSerializer(read_only=True)
-    idSala = serializers.PrimaryKeyRelatedField(queryset=Sala.objects.all(), source='sala')
-
     class Meta:
         model = Asiento
         fields = '__all__'
 
 
 class AsientoReservadoSerializer(serializers.ModelSerializer):
-    asiento = AsientoSerializer(read_only=True)
-    idAsiento = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Asiento.objects.all(), source='asiento')
-    boleta = BoletaSerializer(read_only=True)
-    idBoleta = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Boleta.objects.all(), source='boleta')
-    funcion = FuncionSerializer(read_only=True)
-    idFuncion = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Funcion.objects.all(), source='funcion')
+    boleta = BoletaSerializer(read_only=True, many=False, source='idBoleta')
+    idBoleta = serializers.PrimaryKeyRelatedField(queryset=Boleta.objects.all())
+    # Obtener asiento del idSala
+    asiento = AsientoSerializer(read_only=True, many=False, source='idAsiento')
+    idAsiento = serializers.PrimaryKeyRelatedField(queryset=Asiento.objects.all())
 
     class Meta:
         model = AsientoReservado
@@ -79,18 +75,9 @@ class ProductoSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ProductoEnComboSerializer(serializers.ModelSerializer):
-    producto = ProductoSerializer(read_only=True)
-    idProducto = serializers.PrimaryKeyRelatedField(queryset=Producto.objects.all(), source='producto')
-
-    class Meta:
-        model = ProductoEnCombo
-        fields = '__all__'
-
-
 class ComboSerializer(serializers.ModelSerializer):
-    productoCombo = ProductoEnComboSerializer(read_only=True)
-    idProductoCombo = serializers.PrimaryKeyRelatedField(queryset=ProductoEnCombo.objects.all(), source='productoCombo')
+    producto = ProductoSerializer(read_only=True, many=True, source='Productos')
+    Productos = serializers.PrimaryKeyRelatedField(write_only=True, many=True, queryset=Producto.objects.all())
 
     class Meta:
         model = Combo
@@ -98,12 +85,11 @@ class ComboSerializer(serializers.ModelSerializer):
 
 
 class PedidoSerializer(serializers.ModelSerializer):
-    productos = ProductoSerializer(many=True, read_only=True)
-    combos = ComboSerializer(many=True, read_only=True)
+    Productos = ProductoSerializer(read_only=True, many=True, source='productos')
+    productos = serializers.PrimaryKeyRelatedField(write_only=True, many=True, queryset=Producto.objects.all())
+    Combos = ComboSerializer(read_only=True, many=True, source='combos')
+    combos = serializers.PrimaryKeyRelatedField(write_only=True, many=True, queryset=Combo.objects.all())
 
     class Meta:
         model = Pedido
         fields = '__all__'
-
-
-# Serializer to insert into boleta and asiento

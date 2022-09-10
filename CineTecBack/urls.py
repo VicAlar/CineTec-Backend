@@ -24,11 +24,14 @@ router.register('sala', SalaView, basename='sala')
 router.register('funcion', FuncionView, basename='funcion')
 router.register('boleta', BoletaView, basename='boleta')
 router.register('asiento', AsientoReservadoView, basename='asiento')
-router.register(('producto'), ProductoView, basename='producto')
+router.register('producto', ProductoView, basename='producto')
+router.register('combo', ComboView, basename='combo')
+router.register('pedido', PedidoView, basename='pedido')
 router.register('usuario', Usuario_View, basename='usuario')
 
 urlpatterns = [
     #   path('admin/', admin.site.urls),
     path('', include(router.urls)),
+    path('asientosSala/<idSala>/', AsientosSalaView.as_view()),
     path('token', CustomAuthToken.as_view(), name ='token'),
 ]

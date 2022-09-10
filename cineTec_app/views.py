@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from rest_framework import viewsets
+from rest_framework import generics
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
+
 from cineTec_app.models import *
 from cineTec_app.serializers import *
 
@@ -48,3 +50,23 @@ class AsientoReservadoView(viewsets.ModelViewSet):
 class ProductoView(viewsets.ModelViewSet):
     queryset = Producto.objects.all()
     serializer_class = ProductoSerializer
+
+
+class ComboView(viewsets.ModelViewSet):
+    queryset = Combo.objects.all()
+    serializer_class = ComboSerializer
+
+
+class PedidoView(viewsets.ModelViewSet):
+    queryset = Pedido.objects.all()
+    serializer_class = PedidoSerializer
+
+
+# Vista para los asientos filtrados por sala
+class AsientosSalaView(generics.ListAPIView):
+    serializer_class = AsientoSerializer
+
+    def get_queryset(self):
+        idSala = self.kwargs['idSala']
+        queryset = Asiento.objects.filter(idSala=idSala)
+        return queryset
