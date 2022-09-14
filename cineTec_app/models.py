@@ -11,7 +11,8 @@ class Usuario(AbstractUser):
 
 class Pelicula(models.Model):
     titulo = models.CharField(max_length=100)
-    description = models.TextField()
+    descripcion = models.TextField()
+    imagen = models.ImageField(upload_to='peliculas', null=True, blank=True)
     reparto = models.TextField()
     director = models.CharField(max_length=100)
     duracion = models.IntegerField()
@@ -58,6 +59,7 @@ class AsientoReservado(models.Model):
 class Producto(models.Model):
     nombre = models.CharField(max_length=100)
     precio = models.FloatField()
+    imagen = models.ImageField(upload_to='productos', null=True, blank=True)
 
     def __str__(self):  # Para visualizar el dato de la peli y no el id
         return self.nombre
