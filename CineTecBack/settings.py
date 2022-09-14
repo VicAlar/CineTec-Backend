@@ -26,7 +26,10 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = True
 
 AUTH_USER_MODEL = 'cineTec_app.Usuario'
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 
 # Application definition
 
@@ -41,7 +44,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'cloudinary',
-    'cloudinary_storage'
+    'cloudinary_storage',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -110,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-co'
 
 TIME_ZONE = 'UTC'
 
