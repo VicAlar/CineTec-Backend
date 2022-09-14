@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from cineTec_app.models import *
 
-class Usuario_Serializer(serializers.ModelSerializer):
+
+class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
         fields = '__all__'
@@ -14,11 +15,13 @@ class Usuario_Serializer(serializers.ModelSerializer):
             direccion=validated_data['direccion'],
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name'],
-            fecha_nacimiento=validated_data['fecha_nacimiento'],
+            fecha_nacimiento=validated_data['fecha_nacimiento']
         )
         user.set_password(validated_data['password'])
         user.save()
         return user
+
+
 class PeliculaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pelicula
@@ -60,7 +63,6 @@ class AsientoSerializer(serializers.ModelSerializer):
 class AsientoReservadoSerializer(serializers.ModelSerializer):
     boleta = BoletaSerializer(read_only=True, many=False, source='idBoleta')
     idBoleta = serializers.PrimaryKeyRelatedField(queryset=Boleta.objects.all())
-    # Obtener asiento del idSala
     asiento = AsientoSerializer(read_only=True, many=False, source='idAsiento')
     idAsiento = serializers.PrimaryKeyRelatedField(queryset=Asiento.objects.all())
 
@@ -84,12 +86,40 @@ class ComboSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class PedidoProductoSerializer(serializers.ModelSerializer):
+    producto = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Producto.objects.all())
+    cantidad = serializers.IntegerField()
+
+    class Meta:
+        model = PedidoProductos
+        fields = ['producto', 'cantidad']
+
+
+class PedidoComboSerializer(serializers.ModelSerializer):
+    combo = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Combo.objects.all())
+    cantidad = serializers.IntegerField()
+
+    class Meta:
+        model = PedidoCombos
+        fields = ['combo', 'cantidad']
+
+
 class PedidoSerializer(serializers.ModelSerializer):
     Productos = ProductoSerializer(read_only=True, many=True, source='productos')
-    productos = serializers.PrimaryKeyRelatedField(write_only=True, many=True, queryset=Producto.objects.all())
+    productos = PedidoProductoSerializer(many=True, write_only=True)
     Combos = ComboSerializer(read_only=True, many=True, source='combos')
-    combos = serializers.PrimaryKeyRelatedField(write_only=True, many=True, queryset=Combo.objects.all())
+    combos = PedidoComboSerializer(many=True, write_only=True)
 
     class Meta:
         model = Pedido
         fields = '__all__'
+
+    def create(self, validated_data):
+        productos_data = validated_data.pop('productos')
+        combos_data = validated_data.pop('combos')
+        pedido = Pedido.objects.create(**validated_data)
+        for producto_data in productos_data:
+            PedidoProductos.objects.create(pedido=pedido, **producto_data)
+        for combo_data in combos_data:
+            PedidoCombos.objects.create(pedido=pedido, **combo_data)
+        return pedido

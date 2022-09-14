@@ -1,10 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+
+
 class Usuario(AbstractUser):
     direccion = models.CharField(max_length=100)
     telefono = models.CharField(max_length=20)
     fecha_nacimiento = models.DateField(auto_now=False, null=True)
     token = models.CharField(max_length=100, default='', null=True, blank=True)
+
+
 class Pelicula(models.Model):
     titulo = models.CharField(max_length=100)
     description = models.TextField()
@@ -60,17 +64,28 @@ class Producto(models.Model):
 
 
 class Combo(models.Model):
-    #   idProductoCombo = models.ForeignKey(ProductoEnCombo, on_delete=models.PROTECT)
     nombre = models.CharField(max_length=100)
     Productos = models.ManyToManyField(Producto)
     descuento = models.FloatField(default=20.0)
 
 
 class Pedido(models.Model):
-    productos = models.ManyToManyField(Producto, blank=True)
-    combos = models.ManyToManyField(Combo, blank=True)
+    productos = models.ManyToManyField(Producto, blank=True, through='PedidoProductos', through_fields=('pedido', 'producto'))
+    combos = models.ManyToManyField(Combo, blank=True, through='PedidoCombos', through_fields=('pedido', 'combo'))
     pagado = models.BooleanField()
     total = models.FloatField()
+
+
+class PedidoProductos(models.Model):
+    pedido = models.ForeignKey(Pedido, on_delete=models.PROTECT)
+    producto = models.ForeignKey(Producto, on_delete=models.PROTECT)
+    cantidad = models.IntegerField()
+
+
+class PedidoCombos(models.Model):
+    pedido = models.ForeignKey(Pedido, on_delete=models.PROTECT)
+    combo = models.ForeignKey(Combo, on_delete=models.PROTECT)
+    cantidad = models.IntegerField()
 
 
 class Inventario(models.Model):
