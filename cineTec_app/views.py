@@ -1,8 +1,8 @@
-from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework import generics
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 
 from cineTec_app.models import *
@@ -27,8 +27,12 @@ class CustomAuthToken(ObtainAuthToken):
 
 
 class PeliculaView(viewsets.ModelViewSet):
+    parser_classes = [MultiPartParser, FormParser]
     queryset = Pelicula.objects.all()
     serializer_class = PeliculaSerializer
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
 
 
 class SalaView(viewsets.ModelViewSet):
