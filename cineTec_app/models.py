@@ -17,6 +17,7 @@ class Pelicula(models.Model):
     director = models.CharField(max_length=100)
     duracion = models.IntegerField()
     genero = models.CharField(max_length=100)
+    year = models.CharField(max_length=6)
 
     def __str__(self):  # Para visualizar el dato de la peli y no el id
         return self.titulo

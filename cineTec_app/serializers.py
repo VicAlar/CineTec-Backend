@@ -25,7 +25,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
 class PeliculaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pelicula
-        fields = ('titulo', 'imagen', 'descripcion', 'reparto', 'genero', 'duracion', 'director')
+        fields = '__all__'
 
 
 class SalaSerializer(serializers.ModelSerializer):
