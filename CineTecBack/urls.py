@@ -33,4 +33,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('asientosSala/<idSala>/', AsientosSalaView.as_view()),
     path('token', CustomAuthToken.as_view(), name='token'),
+    path('asientosReservados/<idFuncion>/', AsientoReservadoSalaView.as_view()),
+    path('funcionesPelicula/<idPelicula>/', FuncionesPeliculaView.as_view()),
 ]

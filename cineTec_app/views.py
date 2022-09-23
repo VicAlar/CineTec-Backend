@@ -89,3 +89,21 @@ class AsientosSalaView(generics.ListAPIView):
         idSala = self.kwargs['idSala']
         queryset = Asiento.objects.filter(idSala=idSala)
         return queryset
+
+
+class AsientoReservadoSalaView(generics.ListAPIView):
+    serializer_class = AsientoReservadoSerializer
+
+    def get_view_name(self):
+        idFuncion = self.kwargs['idFuncion']
+        queryset = AsientoReservado.objects.filter(idFuncion=idFuncion)
+        return queryset
+
+
+class FuncionesPeliculaView(generics.ListAPIView):
+    serializer_class = FuncionSerializer
+
+    def get_queryset(self):
+        idPelicula = self.kwargs['idPelicula']
+        queryset = Funcion.objects.filter(idPelicula=idPelicula)
+        return queryset
