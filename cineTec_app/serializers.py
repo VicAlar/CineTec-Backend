@@ -55,6 +55,7 @@ class BoletaSerializer(serializers.ModelSerializer):
 
 
 class AsientoSerializer(serializers.ModelSerializer):
+    idSala= serializers.PrimaryKeyRelatedField(write_only=True, queryset=Sala.objects.all())
     class Meta:
         model = Asiento
         fields = '__all__'

@@ -26,6 +26,7 @@ class Pelicula(models.Model):
 class Sala(models.Model):
     nombre = models.CharField(max_length=100)
     ciudad = models.CharField(max_length=100)
+    capacidad = models.IntegerField()
 
     def __str__(self):  # Para visualizar el dato de la sala y no el id
         return '%s - %s' % (self.nombre, self.ciudad)

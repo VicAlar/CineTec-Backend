@@ -31,13 +31,23 @@ class PeliculaView(viewsets.ModelViewSet):
     queryset = Pelicula.objects.all()
     serializer_class = PeliculaSerializer
 
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
-
 
 class SalaView(viewsets.ModelViewSet):
     queryset = Sala.objects.all()
     serializer_class = SalaSerializer
+
+    # Crear la cantidad de asientos segun la capacidad de la sala
+    def create(self, request, *args, **kwargs):
+        serializer = SalaSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            sala = Sala.objects.get(id=serializer.data['id'])
+            for i in range(1, sala.capacidad + 1):
+                asiento = Asiento(numero=i, idSala=sala)
+                asiento.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
 
 
 class FuncionView(viewsets.ModelViewSet):
