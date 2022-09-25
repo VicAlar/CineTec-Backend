@@ -71,6 +71,7 @@ class Combo(models.Model):
     nombre = models.CharField(max_length=100)
     Productos = models.ManyToManyField(Producto)
     descuento = models.FloatField(default=20.0)
+    precioTotal = models.FloatField()
 
 
 class Pedido(models.Model):
