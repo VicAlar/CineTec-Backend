@@ -94,7 +94,7 @@ class AsientosSalaView(generics.ListAPIView):
 class AsientoReservadoSalaView(generics.ListAPIView):
     serializer_class = AsientoReservadoSerializer
 
-    def get_view_name(self):
+    def get_queryset(self):
         idFuncion = self.kwargs['idFuncion']
         queryset = AsientoReservado.objects.filter(idFuncion=idFuncion)
         return queryset
